@@ -1,30 +1,33 @@
 <!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1"><title>需求管理看板 · 加密</title>
-<style>body{margin:0;height:100vh;display:grid;place-items:center;background:#f6f7f9;font:14px/1.6 "PingFang SC",system-ui,sans-serif;color:#1f2329}
-.card{width:min(380px,90vw);background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:26px;box-shadow:0 10px 30px rgba(15,23,42,.08)}
-h1{margin:0 0 6px;font-size:17px}p{margin:0 0 16px;color:#6b7280;font-size:12.5px}
-input{width:100%;height:38px;padding:0 12px;border:1px solid #e5e7eb;border-radius:9px;font:inherit;outline:none}
-input:focus{border-color:#4f6bed}button{width:100%;height:38px;margin-top:10px;border:0;border-radius:9px;background:#4f6bed;color:#fff;font:inherit;font-weight:600;cursor:pointer}
-.err{margin-top:10px;color:#dc2626;font-size:12px;display:none}#content{display:none}</style></head>
-<body><div class="card" id="gate"><h1>需求管理看板</h1><p>输入访问密码后查看</p>
-<input id="pw" type="password" placeholder="访问密码" autofocus><button id="go">解锁</button><div class="err" id="err">密码不正确</div></div>
-<div id="content"></div>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>需求管理看板</title>
+<style>
+:root{--bg:#f6f7f9;--card:#fff;--line:#e5e7eb;--txt:#1f2329;--mut:#6b7280;--accent:#4f6bed}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--txt);font:14px/1.5 "PingFang SC","Microsoft YaHei",system-ui,sans-serif}
+header{padding:20px 28px 8px}h1{margin:0;font-size:20px}sub{color:var(--mut);font-size:12px}
+.wrap{max-width:1200px;margin:0 auto;padding:0 28px 40px}
+.tools{display:flex;gap:10px;align-items:center;margin:16px 0}
+input,select{height:32px;padding:0 10px;border:1px solid var(--line);border-radius:8px;background:#fff;font:inherit}
+input{flex:1;max-width:320px}
+table{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+th,td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--line);font-size:13px;vertical-align:middle}
+th{background:#fafbfc;color:var(--mut);font-weight:600;font-size:12px}
+tr:last-child td{border-bottom:0}td.t{font-weight:500}
+.pill{display:inline-block;padding:1px 8px;border-radius:999px;background:#eef1fe;color:#3f57c9;font-size:12px}
+.bar{display:inline-block;width:80px;height:6px;border-radius:999px;background:#eef0f3;overflow:hidden;vertical-align:middle}
+.bar span{display:block;height:100%;background:var(--accent)}
+em{font-style:normal;color:var(--mut);font-size:12px;margin-left:6px}
+.empty{padding:40px;text-align:center;color:var(--mut)}
+</style></head><body>
+<header><h1>需求管理看板</h1><sub>共 4 条需求 · 快照 2026/11/12 20:11:01 · 每次刷新自动同步面板数据</sub></header>
+<div class="wrap">
+<div class="tools"><input id="q" placeholder="搜索标题 / 项目 / 负责人"><select id="s"><option value="">全部状态</option><option value="原始需求">原始需求</option><option value="方案分析">方案分析</option><option value="需求串讲">需求串讲</option><option value="已基线">已基线</option><option value="开发中">开发中</option><option value="测试中">测试中</option><option value="已上线">已上线</option></select></div>
+<table><thead><tr><th>需求</th><th>项目</th><th>状态</th><th>优先级</th><th>OBP</th><th>进度</th><th>负责人</th></tr></thead>
+<tbody id="rows"><tr data-search="【hm7.1】【ai in app】长时异步任务支持多个并行 ai in app "><td class="t">【HM7.1】【AI in App】长时异步任务支持多个并行</td><td>AI in App</td><td><span class="pill">方案分析</span></td><td>—</td><td>2026-11</td><td><div class="bar"><span style="width:52%"></span></div><em>52%</em></td><td>—</td></tr><tr data-search="【hm7.1】【onapp】后台全双工与胶囊状态管理 onapp huliang 00946372"><td class="t">【HM7.1】【OnApp】后台全双工与胶囊状态管理</td><td>OnApp</td><td><span class="pill">方案分析</span></td><td>P0</td><td>2026-11</td><td><div class="bar"><span style="width:72%"></span></div><em>72%</em></td><td>huliang 00946372</td></tr><tr data-search="【hm7.1】【onapp】出海适配 onapp "><td class="t">【HM7.1】【OnApp】出海适配</td><td>OnApp</td><td><span class="pill">方案分析</span></td><td>P0</td><td>2026-11</td><td><div class="bar"><span style="width:63%"></span></div><em>63%</em></td><td>—</td></tr><tr data-search="【hm7.1】【ai in app】端侧 system agent 支持开放平台配置并下发 skill ai in app "><td class="t">【HM7.1】【AI in App】端侧 System Agent 支持开放平台配置并下发 Skill</td><td>AI in App</td><td><span class="pill">原始需求</span></td><td>—</td><td>2026-11</td><td><div class="bar"><span style="width:7%"></span></div><em>7%</em></td><td>—</td></tr></tbody></table>
+<div class="empty" id="none" style="display:none">没有符合条件的需求</div>
+</div>
 <script>
-const SALT="XD8zqrPjd1Ih41WgSUPswQ==",IV="P8NYkQ4RKbCWQVql",DATA="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";
-const b64d=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
-async function unlock(){
-  const pw=document.getElementById('pw').value;
-  try{
-    const base=await crypto.subtle.importKey('raw',new TextEncoder().encode(pw),'PBKDF2',false,['deriveKey']);
-    const key=await crypto.subtle.deriveKey({name:'PBKDF2',salt:b64d(SALT),iterations:200000,hash:'SHA-256'},base,{name:'AES-GCM',length:256},false,['decrypt']);
-    const buf=await crypto.subtle.decrypt({name:'AES-GCM',iv:b64d(IV)},key,b64d(DATA));
-    const html=new TextDecoder().decode(buf);
-    const doc=new DOMParser().parseFromString(html,'text/html');
-    document.head.innerHTML=doc.head.innerHTML;document.body.innerHTML=doc.body.innerHTML;
-    const s=document.createElement('script');s.textContent=[...doc.querySelectorAll('script')].map(x=>x.textContent).join('\n');document.body.appendChild(s);
-    sessionStorage.setItem('req.board.pw',pw);
-  }catch(e){document.getElementById('err').style.display='block';}
-}
-document.getElementById('go').onclick=unlock;
-document.getElementById('pw').addEventListener('keydown',e=>{if(e.key==='Enter')unlock();});
+const q=document.getElementById('q'),s=document.getElementById('s'),rows=[...document.querySelectorAll('#rows tr')],none=document.getElementById('none');
+function apply(){const t=q.value.trim().toLowerCase(),st=s.value;let n=0;for(const r of rows){const ok=(!t||r.dataset.search.includes(t))&&(!st||r.children[2].textContent.trim()===st);r.style.display=ok?'':'none';if(ok)n++;}none.style.display=n?'none':'';}
+q.addEventListener('input',apply);s.addEventListener('change',apply);
 </script></body></html>
