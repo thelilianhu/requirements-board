@@ -1,33 +1,83 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>需求管理看板</title>
-<style>
-:root{--bg:#f6f7f9;--card:#fff;--line:#e5e7eb;--txt:#1f2329;--mut:#6b7280;--accent:#4f6bed}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--txt);font:14px/1.5 "PingFang SC","Microsoft YaHei",system-ui,sans-serif}
-header{padding:20px 28px 8px}h1{margin:0;font-size:20px}sub{color:var(--mut);font-size:12px}
-.wrap{max-width:1200px;margin:0 auto;padding:0 28px 40px}
-.tools{display:flex;gap:10px;align-items:center;margin:16px 0}
-input,select{height:32px;padding:0 10px;border:1px solid var(--line);border-radius:8px;background:#fff;font:inherit}
-input{flex:1;max-width:320px}
-table{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden}
-th,td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--line);font-size:13px;vertical-align:middle}
-th{background:#fafbfc;color:var(--mut);font-weight:600;font-size:12px}
-tr:last-child td{border-bottom:0}td.t{font-weight:500}
-.pill{display:inline-block;padding:1px 8px;border-radius:999px;background:#eef1fe;color:#3f57c9;font-size:12px}
-.bar{display:inline-block;width:80px;height:6px;border-radius:999px;background:#eef0f3;overflow:hidden;vertical-align:middle}
-.bar span{display:block;height:100%;background:var(--accent)}
-em{font-style:normal;color:var(--mut);font-size:12px;margin-left:6px}
-.empty{padding:40px;text-align:center;color:var(--mut)}
-</style></head><body>
-<header><h1>需求管理看板</h1><sub>共 4 条需求 · 快照 2026/11/12 20:11:01 · 每次刷新自动同步面板数据</sub></header>
-<div class="wrap">
-<div class="tools"><input id="q" placeholder="搜索标题 / 项目 / 负责人"><select id="s"><option value="">全部状态</option><option value="原始需求">原始需求</option><option value="方案分析">方案分析</option><option value="需求串讲">需求串讲</option><option value="已基线">已基线</option><option value="开发中">开发中</option><option value="测试中">测试中</option><option value="已上线">已上线</option></select></div>
-<table><thead><tr><th>需求</th><th>项目</th><th>状态</th><th>优先级</th><th>OBP</th><th>进度</th><th>负责人</th></tr></thead>
-<tbody id="rows"><tr data-search="【hm7.1】【ai in app】长时异步任务支持多个并行 ai in app "><td class="t">【HM7.1】【AI in App】长时异步任务支持多个并行</td><td>AI in App</td><td><span class="pill">方案分析</span></td><td>—</td><td>2026-11</td><td><div class="bar"><span style="width:52%"></span></div><em>52%</em></td><td>—</td></tr><tr data-search="【hm7.1】【onapp】后台全双工与胶囊状态管理 onapp huliang 00946372"><td class="t">【HM7.1】【OnApp】后台全双工与胶囊状态管理</td><td>OnApp</td><td><span class="pill">方案分析</span></td><td>P0</td><td>2026-11</td><td><div class="bar"><span style="width:72%"></span></div><em>72%</em></td><td>huliang 00946372</td></tr><tr data-search="【hm7.1】【onapp】出海适配 onapp "><td class="t">【HM7.1】【OnApp】出海适配</td><td>OnApp</td><td><span class="pill">方案分析</span></td><td>P0</td><td>2026-11</td><td><div class="bar"><span style="width:63%"></span></div><em>63%</em></td><td>—</td></tr><tr data-search="【hm7.1】【ai in app】端侧 system agent 支持开放平台配置并下发 skill ai in app "><td class="t">【HM7.1】【AI in App】端侧 System Agent 支持开放平台配置并下发 Skill</td><td>AI in App</td><td><span class="pill">原始需求</span></td><td>—</td><td>2026-11</td><td><div class="bar"><span style="width:7%"></span></div><em>7%</em></td><td>—</td></tr></tbody></table>
-<div class="empty" id="none" style="display:none">没有符合条件的需求</div>
+<meta name="theme-color" content="#f6f7f9">
+<title>需求管理 · 只读看板</title>
+<meta name="description" content="需求管理只读看板：按阶段、项目、优先级与 OBP 查看需求与进度。">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%234f6bed'/%3E%3Cpath d='M9 11.5h14M9 16h9.5M9 20.5h6.5' stroke='%23fff' stroke-width='2.4' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+<div class="dsw-req" id="app">
+  <header class="dsw-req-head">
+    <div class="dsw-req-heading">
+      <h1 class="dsw-req-title">需求管理</h1>
+      <p class="dsw-req-sub">只读展示需求管理面板的数据，可按阶段、项目、优先级与 OBP 快速筛选查看。</p>
+    </div>
+    <div class="dsw-req-head-actions">
+      <span class="dsw-req-readonly" title="静态只读页面，不会修改本地需求面板的数据">只读看板</span>
+    </div>
+  </header>
+
+  <nav class="dsw-req-tabs" data-req-tabs role="tablist" aria-label="视图">
+    <button type="button" role="tab" class="dsw-req-tab" data-view="raws" aria-selected="false" aria-controls="body">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4.4 12.4 6.7 5.9A2 2 0 0 1 8.6 4.6h6.8a2 2 0 0 1 1.9 1.3l2.3 6.5v4.3a2 2 0 0 1-2 2H6.4a2 2 0 0 1-2-2Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M4.4 12.4h4.1l.9 1.9h5.2l.9-1.9h4.1" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+      原始需求
+    </button>
+    <button type="button" role="tab" class="dsw-req-tab is-active" data-view="list" aria-selected="true" aria-controls="body">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M8.4 6.5h11M8.4 12h11M8.4 17.5h11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="4.8" cy="6.5" r="1.2" fill="currentColor"/><circle cx="4.8" cy="12" r="1.2" fill="currentColor"/><circle cx="4.8" cy="17.5" r="1.2" fill="currentColor"/></svg>
+      需求管理列表
+    </button>
+  </nav>
+
+  <div class="dsw-req-steps" id="steps" data-req-steps role="tablist" aria-label="阶段">
+    <button type="button" role="tab" class="dsw-req-step" data-step="all" aria-selected="true">
+      <span class="dsw-req-step-label">所有需求</span>
+      <span class="dsw-req-step-count" data-count>–</span>
+    </button>
+    <button type="button" role="tab" class="dsw-req-step" data-step="analysis" aria-selected="false">
+      <span class="dsw-req-step-label">方案分析</span>
+      <span class="dsw-req-step-count" data-count>–</span>
+    </button>
+    <button type="button" role="tab" class="dsw-req-step" data-step="walkthrough" aria-selected="false">
+      <span class="dsw-req-step-label">需求串讲</span>
+      <span class="dsw-req-step-count" data-count>–</span>
+    </button>
+    <button type="button" role="tab" class="dsw-req-step" data-step="planned" aria-selected="false">
+      <span class="dsw-req-step-label">已基线</span>
+      <span class="dsw-req-step-count" data-count>–</span>
+    </button>
+    <button type="button" role="tab" class="dsw-req-step" data-step="doing" aria-selected="false">
+      <span class="dsw-req-step-label">开发中</span>
+      <span class="dsw-req-step-count" data-count>–</span>
+    </button>
+    <button type="button" role="tab" class="dsw-req-step" data-step="review" aria-selected="false">
+      <span class="dsw-req-step-label">测试中</span>
+      <span class="dsw-req-step-count" data-count>–</span>
+    </button>
+    <button type="button" role="tab" class="dsw-req-step" data-step="done" aria-selected="false">
+      <span class="dsw-req-step-label">已上线</span>
+      <span class="dsw-req-step-count" data-count>–</span>
+    </button>
+  </div>
+
+  <main class="dsw-req-body" id="body" data-req-body>
+    <noscript>
+      <div class="dsw-req-empty">
+        <div class="dsw-req-empty-title">需要启用 JavaScript</div>
+        <div class="dsw-req-empty-hint">这个看板通过脚本读取同目录的 data.json 并渲染列表。</div>
+      </div>
+    </noscript>
+  </main>
+
+  <footer class="dsw-req-foot" id="foot">
+    <span>正在加载数据…</span>
+    <span class="dsw-req-foot-state"><span class="dsw-req-foot-dot is-loading" aria-hidden="true"></span><span class="dsw-req-foot-label">只读快照</span></span>
+  </footer>
 </div>
-<script>
-const q=document.getElementById('q'),s=document.getElementById('s'),rows=[...document.querySelectorAll('#rows tr')],none=document.getElementById('none');
-function apply(){const t=q.value.trim().toLowerCase(),st=s.value;let n=0;for(const r of rows){const ok=(!t||r.dataset.search.includes(t))&&(!st||r.children[2].textContent.trim()===st);r.style.display=ok?'':'none';if(ok)n++;}none.style.display=n?'none':'';}
-q.addEventListener('input',apply);s.addEventListener('change',apply);
-</script></body></html>
+<script src="./app.js" defer></script>
+<script src="chat.js"></script>
+</body>
+</html>

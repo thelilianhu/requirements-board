@@ -1,0 +1,7 @@
+name = "requirements-board-api"
+main = "src/index.js"
+compatibility_date = "2025-01-01"
+
+# 访问令牌由 wrangler secret 注入，不进仓库
+# wrangler secret put DEEPSEEK_API_KEY
+# wrangler secret put BOARD_TOKEN
